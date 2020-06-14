@@ -1,5 +1,6 @@
 package com.erickharada.bookstoremanager.service;
 
+import com.erickharada.bookstoremanager.dto.BookDTO;
 import com.erickharada.bookstoremanager.dto.MessageResponseDTO;
 import com.erickharada.bookstoremanager.entity.Book;
 import com.erickharada.bookstoremanager.repository.BookRepository;
@@ -12,8 +13,16 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public MessageResponseDTO create(Book book){
-        Book savedBook = bookRepository.save(book);
+    public MessageResponseDTO create(BookDTO bookDTO){
+        Book bookToSave = Book.builder()
+                .name(bookDTO.getName())
+                .pages(bookDTO.getPages())
+                .chapters(bookDTO.getChapters())
+                .isbn(bookDTO.getIsbn())
+                .publisherName(bookDTO.getPublisherName())
+                .author(bookDTO.getAuthor())
+                .build();
+        Book savedBook = bookRepository.save(bookToSave);
 
         return MessageResponseDTO.builder()
                 .message("Book Created with ID "+ savedBook.getId())
