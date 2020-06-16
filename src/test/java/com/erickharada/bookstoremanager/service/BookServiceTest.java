@@ -3,6 +3,7 @@ package com.erickharada.bookstoremanager.service;
 import com.erickharada.bookstoremanager.dto.BookDTO;
 import com.erickharada.bookstoremanager.entity.Author;
 import com.erickharada.bookstoremanager.entity.Book;
+import com.erickharada.bookstoremanager.exception.BookNotFoundException;
 import com.erickharada.bookstoremanager.repository.BookRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class BookServiceTest {
     private BookService bookService;
 
     @Test
-    void whenGiveExistingIdThenReturnBook() {
+    void whenGiveExistingIdThenReturnBook() throws BookNotFoundException {
         Author author = Author.builder()
                 .name("Benjamin Graham")
                 .age(100)

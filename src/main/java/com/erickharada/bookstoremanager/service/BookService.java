@@ -5,6 +5,7 @@ import com.erickharada.bookstoremanager.dto.BookDTO;
 import com.erickharada.bookstoremanager.dto.MessageResponseDTO;
 import com.erickharada.bookstoremanager.entity.Author;
 import com.erickharada.bookstoremanager.entity.Book;
+import com.erickharada.bookstoremanager.exception.BookNotFoundException;
 import com.erickharada.bookstoremanager.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,21 +34,22 @@ public class BookService {
                 .build();
     }
 
-    public BookDTO findById(Long id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
+    public BookDTO findById(Long id) throws BookNotFoundException {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
         Author author = Author.builder()
-                .id(optionalBook.get().getAuthor().getId())
-                .name(optionalBook.get().getAuthor().getName())
-                .age(optionalBook.get().getAuthor().getAge())
+                .id(book.getAuthor().getId())
+                .name(book.getAuthor().getName())
+                .age(book.getAuthor().getAge())
                 .build();
 
         BookDTO bookDTO = BookDTO.builder()
-                .id(optionalBook.get().getId())
-                .name(optionalBook.get().getName())
-                .pages(optionalBook.get().getPages())
-                .chapters(optionalBook.get().getChapters())
-                .isbn(optionalBook.get().getIsbn())
-                .publisherName(optionalBook.get().getPublisherName())
+                .id(book.getId())
+                .name(book.getName())
+                .pages(book.getPages())
+                .chapters(book.getChapters())
+                .isbn(book.getIsbn())
+                .publisherName(book.getPublisherName())
                 .author(author)
                 .build();
 
