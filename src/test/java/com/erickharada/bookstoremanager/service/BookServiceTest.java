@@ -5,6 +5,7 @@ import com.erickharada.bookstoremanager.entity.Author;
 import com.erickharada.bookstoremanager.entity.Book;
 import com.erickharada.bookstoremanager.exception.BookNotFoundException;
 import com.erickharada.bookstoremanager.repository.BookRepository;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,5 +48,14 @@ public class BookServiceTest {
         Assertions.assertEquals(fakeBook.getName(), bookDTO.getName());
         Assertions.assertEquals(fakeBook.getIsbn(), bookDTO.getIsbn());
         Assertions.assertEquals(fakeBook.getPublisherName(), bookDTO.getPublisherName());
+    }
+
+    @Test
+    void whenGiveUnexistingIdThenNotFoundThrowAnException() {
+        long invalidId = 10L;
+
+        Mockito.when(bookRepository.findById(invalidId)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(BookNotFoundException.class, () -> bookService.findById(invalidId));
     }
 }
